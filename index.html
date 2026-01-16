@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Curso de Matemáticas - Dashboard</title>
+
+<style>
+/* ===== BASE ===== */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #0f172a, #020617);
+  margin: 0;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #e5e7eb;
+}
+
+.card {
+  width: 100%;
+  max-width: 1000px;
+  background: #020617;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.6);
+  border: 1px solid #1e293b;
+  margin-bottom: 30px;
+}
+
+h1 { font-size: 1.8rem; text-align: center; margin: 0 0 20px; color: #f8fafc; }
+
+
+/* ===== CARÁTULA ===== */
+.caratula {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease-in;
+}
+
+.titulo-principal {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #f8fafc, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+
+.logo-hero {
+  width: 200px; /* Tamaño grande para que se aprecie bien */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  /* Filtro opcional para que los colores resalten sobre el fondo oscuro */
+  filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.2)); 
+}
+
+.marca-texto {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== PERFIL DEL TUTOR (ACTUALIZADO) ===== */
+.perfil-tutor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.foto-perfil {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #38bdf8;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+  margin-bottom: 5px;
+}
+
+.nombre-tutor {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.rating-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.estrellas-perfil {
+  color: #ffca28;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.texto-opiniones {
+  color: #e5e7eb;
+  font-size: 1rem;
+}
+
+.desc-corta {
+  color: #38bdf8;
+  font-size: 1rem;
+  font-weight: 500;
+  max-width: 80%;
+  margin-top: 5px;
+}
+
+.horas-info {
+  background: rgba(56, 189, 248, 0.1);
+  color: #f8fafc;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  margin-top: 5px;
+}
+
+/* ===== PLANES ===== */
+#planes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.plan-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.plan-card:hover { transform: translateY(-5px); border-color: #38bdf8; }
+.plan-nombre { font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; }
+.plan-precio { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin-bottom: 20px; }
+.plan-lista { margin: 0 0 20px; padding: 0; list-style: none; flex-grow: 1; }
+.plan-lista li { font-size: 0.85rem; margin-bottom: 12px; color: #cbd5e1; display: flex; gap: 10px; }
+
+.btn-elegir {
+  background: #38bdf8;
+  color: #020617;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ===== MODAL DE PAGO ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #0f172a;
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid #38bdf8;
+  max-width: 450px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+}
+
+.close-modal { position: absolute; top: 15px; right: 15px; color: #94a3b8; cursor: pointer; font-size: 1.5rem; }
+.monto-destacado { font-size: 1.8rem; color: #38bdf8; font-weight: 800; margin: 15px 0; }
+.pago-datos { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin: 20px 0; border: 1px dashed #334155; }
+.copy-badge { background: #38bdf8; color: #020617; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 5px; }
+
+/* ===== CURSO ===== */
+#curso { display: flex; flex-direction: column; gap: 24px; }
+.unidad { background: rgba(15, 23, 42, 0.6); border-radius: 16px; padding: 20px; border: 1px solid #1e293b; margin-bottom: 20px; }
+.unidad h2 { font-size: 1.2rem; color: #38bdf8; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 8px; margin-top: 0; }
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.item-container { display: flex; flex-direction: column; }
+.item-container.active { grid-column: 1 / -1; }
+
+.video-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(56, 189, 248, 0.06);
+  padding: 12px 18px; 
+  border-radius: 12px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.orden { background: rgba(56, 189, 248, 0.2); color: #38bdf8; min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-weight: 800; margin-right: 12px; }
+
+.player-container {
+  display: none;
+  margin-top: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 100%;
+  max-aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
+  border: 2px solid #38bdf8;
+  background: #000;
+}
+
+.msg-container {
+  display: none;
+  margin-top: 15px;
+  background: #0f172a;
+  padding: 25px;
+  border-radius: 15px;
+  border: 2px solid #38bdf8;
+  text-align: center;
+  color: #f8fafc;
+}
+
+.player-container.active, .msg-container.active { display: block; }
+iframe { width: 100%; height: 100%; border: none; }
+
+.btn-comprar-msg {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #38bdf8;
+    color: #020617;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.subcategoria { grid-column: 1 / -1; font-size: 0.75rem; font-weight: 700; color: #7dd3fc; margin: 15px 0 5px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<header class="caratula">
+  <h1 class="titulo-principal">Curso de Ingreso a la UTN (2026)</h1>
+</header>
+
+
+<div class="modal-overlay" id="pago-modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <h2 style="margin-top:0">Detalles del Pago</h2>
+    <p>Monto a pagar:</p>
+    <div class="monto-destacado" id="modal-monto"></div>
+    <div class="pago-datos">
+      <div style="margin-bottom:10px">
+        <span style="display:block; font-size:0.7rem; color:#94a3b8">TITULAR</span>
+        <strong id="titular-text">Cargando...</strong>
+      </div>
+      <div>
+        <span style="display:block; font-size:0.7rem; color:#94a3b8">ALIAS MERCADO PAGO</span>
+        <strong id="alias-text">Cargando...</strong>
+        <span class="copy-badge" onclick="copyAlias()">COPIAR</span>
+      </div>
+    </div>
+<div style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
+  Al realizar el pago enviar el comprobante por 
+  <a href="https://wa.me/5491130316701" target="_blank" style="color: #22c55e; font-weight: bold; text-decoration: none;">
+    WhatsApp
+  </a>.
+</div>
+  </div>
+</div>
+
+<div class="card">
+  <h1>👨‍🏫 Profesor </h1>
+  <div id="perfil-tutor" class="perfil-tutor-container">
+    Cargando información...
+  </div>
+</div>
+
+<div class="card" id="seccion-planes">
+  <h1>💰 Elige tu Plan</h1>
+  <div id="planes-container">Cargando planes...</div>
+</div>
+
+<div class="card">
+  <h1>🎓 Contenido del Curso</h1>
+  <div style="text-align:center; font-size:0.85rem; color:#94a3b8; margin: 10px 0 30px; display:flex; justify-content:center; gap:15px;">
+    <span><span style="color:#22c55e">●</span> Disponible</span>
+    <span><span style="color:#ef4444">●</span> Exclusivo</span>
+  </div>
+  <div id="curso"></div>
+</div>
+
+<script>
+const sheetId = "1N-bc-zlF_ZPPWsoYa5yoJKuyS6IZ4yHJLazwqYoquVI";
+const gids = { 
+    videos: "2142011", 
+    planes: "1852274774", 
+    cuenta: "1480369978",
+    profesor: "1426786406" 
+};
+let globalAlias = "";
+
+// 1. CARGAR DATOS DEL PROFESOR
+fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gids.profesor}&tqx=out:json&headers=0`)
+  .then(r => r.text()).then(t => {
+    const data = JSON.parse(t.substring(47).slice(0, -2));
+    const rows = data.table.rows;
+    
+    // Extracción de datos según los índices de tu Excel
+    const nombre    = rows[0].c[1] ? rows[0].c[1].v : ""; // Alejo
+    const horas     = rows[2].c[1] ? rows[2].c[1].v : "0"; // 224
+    const calif     = rows[3].c[1] ? rows[3].c[1].v : "0"; // 4.8
+    const opin      = rows[4].c[1] ? rows[4].c[1].v : "0"; // 39
+    const descCorta = rows[5].c[1] ? rows[5].c[1].v : ""; // Estudiante Avanzado...
+
+    // Lógica de estrellas
+    const numStars = Math.round(parseFloat(calif));
+    const estrellas = "★".repeat(numStars) + "☆".repeat(5 - numStars);
+
+    // Renderizado del perfil
+    document.getElementById("perfil-tutor").innerHTML = `
+      <img src="profile.jpg" alt="Foto de perfil" class="foto-perfil">
+      <h2 class="nombre-tutor">${nombre}</h2>
+      <div class="rating-line">
+        <div class="estrellas-perfil">${estrellas}</div>
+        <div class="texto-opiniones">
+          <strong>${calif}</strong> (${opin} opiniones)
+        </div>
+      </div>
+      <div class="desc-corta">${descCorta}</div>
+      <div class="horas-info">
+        <strong>${horas}</strong> horas de clases dadas en EyA
+      </div>
+    `;
+  });
+
+// 2. CARGAR CUENTA DE PAGO
+fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gids.cuenta}&tqx=out:json`)
+  .then(r => r.text()).then(t => {
+    const r = JSON.parse(t.substring(47).slice(0, -2)).table.rows;
+    document.getElementById("titular-text").innerText = r[0].c[1].v;
+    globalAlias = r[1].c[1].v;
+    document.getElementById("alias-text").innerText = globalAlias;
+  });
+
+// 3. CARGAR PLANES
+fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gids.planes}&tqx=out:json`)
+  .then(r => r.text()).then(t => {
+    const rows = JSON.parse(t.substring(47).slice(0, -2)).table.rows;
+    const container = document.getElementById("planes-container");
+    container.innerHTML = "";
+    rows.forEach(r => {
+        const nombrePlan = r.c[0].v;
+        // 1. CREAMOS EL PRECIO CON PUNTO
+        const precioConPunto = Number(r.c[1].v).toLocaleString('es-AR');
+        
+        const items = r.c[2].v.split('\n').map(i => `<li>🔹 ${i.trim()}</li>`).join('');
+        
+        container.innerHTML += `
+          <div class="plan-card">
+            <div class="plan-nombre">${nombrePlan}</div>
+            <div class="plan-precio">$${precioConPunto}</div>
+            <ul class="plan-lista">${items}</ul>
+            <button class="btn-elegir" onclick="openModal('${precioConPunto}')">Elegir Plan</button>
+          </div>`;
+    });
+  });
+function openModal(monto) { 
+    // Cambiá la línea de abajo para que reciba el monto ya formateado
+    document.getElementById("modal-monto").innerText = "$" + monto; 
+    document.getElementById("pago-modal").style.display = "flex"; 
+}
+function closeModal() { document.getElementById("pago-modal").style.display = "none"; }
+function copyAlias() { navigator.clipboard.writeText(globalAlias); alert("¡Alias copiado!"); }
+
+// 4. CARGAR VIDEOS Y CURSO
+const tree = {};
+fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gids.videos}&tqx=out:json`)
+  .then(r => r.text()).then(t => {
+    const json = JSON.parse(t.substring(47).slice(0, -2));
+    build(json.table.rows);
+});
+
+function getEmbedUrl(url) {
+    if (!url) return null;
+    let id = url.includes("v=") ? url.split("v=")[1].split("&")[0] : url.split("youtu.be/")[1];
+    return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
+}
+
+function build(rows) {
+  rows.forEach(r => {
+    const c = r.c;
+    const nro = c[6]?.v || "";
+    const unidad = c[1]?.v;
+    const tipo = c[3]?.v;
+    const sub = c[5]?.v && c[5]?.v !== "-" ? c[5].v : null;
+    const video = c[7]?.v;
+    const embed = getEmbedUrl(c[8]?.v);
+    if (!unidad) return;
+    tree[unidad] ??= {}; tree[unidad][tipo] ??= {};
+    const dest = sub ? (tree[unidad][tipo][sub] ??= []) : (tree[unidad][tipo]._items ??= []);
+    dest.push({ nro, video, embed });
+  });
+  renderCurso();
+}
+
+function renderCurso() {
+    const cont = document.getElementById("curso");
+    Object.keys(tree).forEach(u => {
+        const uDiv = document.createElement("div"); uDiv.className = "unidad";
+        uDiv.innerHTML = `<h2>${u}</h2>`;
+        Object.keys(tree[u]).forEach(t => {
+            const bDiv = document.createElement("div");
+            bDiv.innerHTML = `<h3 class="subcategoria">${t}</h3>`;
+            const grid = document.createElement("div"); grid.className = "items";
+            Object.keys(tree[u][t]).forEach(k => {
+                const list = k === "_items" ? tree[u][t]._items : tree[u][t][k];
+                if (k !== "_items") {
+                  const s = document.createElement("div"); s.className = "subcategoria"; s.textContent = k; grid.appendChild(s);
+                }
+                list.forEach(v => {
+                    const wrap = document.createElement("div"); wrap.className = "item-container";
+                    const btn = document.createElement("div"); btn.className = "video-btn";
+                    btn.innerHTML = `<div style="display:flex;align-items:center"><span class="orden">${v.nro}</span><span>${v.video}</span></div><span style="color:${v.embed ? '#22c55e' : '#ef4444'}">▼</span>`;
+                    const player = document.createElement("div");
+                    btn.onclick = () => {
+                        const act = wrap.classList.contains("active");
+                        document.querySelectorAll('.item-container').forEach(el => {
+                            el.classList.remove('active');
+                            const p = el.querySelector('.player-container') || el.querySelector('.msg-container');
+                            if(p) { p.classList.remove('active'); p.innerHTML = ""; }
+                        });
+                        if (!act) {
+                            wrap.classList.add("active");
+                            if (v.embed) {
+                                player.className = "player-container active";
+                                player.innerHTML = `<iframe src="${v.embed}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                            } else {
+                                player.className = "msg-container active";
+                                player.innerHTML = `
+                                    <div style="font-size:1.1rem; margin-bottom:10px;">🔒 Contenido Protegido</div>
+                                    <p>Este video es exclusivo para alumnos.</p>
+                                    <button class="btn-comprar-msg" onclick="document.getElementById('seccion-planes').scrollIntoView({behavior: 'smooth'})">
+                                        Comprar curso
+                                    </button>`;
+                            }
+                            setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                        }
+                    };
+                    wrap.appendChild(btn); wrap.appendChild(player); grid.appendChild(wrap);
+                });
+            });
+            bDiv.appendChild(grid); uDiv.appendChild(bDiv);
+        });
+        cont.appendChild(uDiv);
+    });
+}
+</script>
+</body>
+</html>
