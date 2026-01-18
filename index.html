@@ -263,6 +263,47 @@ iframe { width: 100%; height: 100%; border: none; }
 }
 
 .subcategoria { grid-column: 1 / -1; font-size: 0.75rem; font-weight: 700; color: #7dd3fc; margin: 15px 0 5px; text-transform: uppercase; }
+
+/* Estilos para la leyenda de puntos grandes */
+.leyenda-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Espacio entre los dos textos */
+  margin-bottom: 30px;
+  padding: 10px;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Espacio entre el punto y el texto */
+}
+
+.punto {
+  width: 14px;  /* Tamaño del punto */
+  height: 14px;
+  border-radius: 50%; /* Lo hace circular */
+  display: inline-block;
+}
+
+.punto.verde { background-color: #22c55e; }
+.punto.rojo { background-color: #ef4444; }
+
+.texto-leyenda {
+  font-size: 1.1rem; /* Tamaño de la letra */
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+  .leyenda-contenedor {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20%;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -312,10 +353,18 @@ iframe { width: 100%; height: 100%; border: none; }
 
 <div class="card">
   <h1>🎓 Contenido del Curso</h1>
-  <div style="text-align:center; font-size:0.85rem; color:#94a3b8; margin: 10px 0 30px; display:flex; justify-content:center; gap:15px;">
-    <span><span style="color:#22c55e">●</span> Disponible</span>
-    <span><span style="color:#ef4444">●</span> Exclusivo</span>
+  
+  <div class="leyenda-contenedor">
+    <div class="leyenda-item">
+      <span class="punto verde"></span>
+      <span class="texto-leyenda">Disponible para todos</span>
+    </div>
+    <div class="leyenda-item">
+      <span class="punto rojo"></span>
+      <span class="texto-leyenda">Exclusivo para alumnos </span>
+    </div>
   </div>
+
   <div id="curso"></div>
 </div>
 
